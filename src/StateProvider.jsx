@@ -7,13 +7,16 @@ export const State = () => useContext(StateContext)
 export const StateProvider = ({children}) => {
     const [showCreatePost, setShowCreatePost] = useState(false)
     const [editingId, setEditingId] = useState(false)
+    const [selectedUserId, setSelectedUserId] = useState(false)
 
     return (
         <StateContext.Provider value={{
             showCreatePost, 
             setShowCreatePost,
             editingId,
-            setEditingId
+            setEditingId,
+            selectedUserId,
+            setSelectedUserId
             }}>
             {children}
         </StateContext.Provider>

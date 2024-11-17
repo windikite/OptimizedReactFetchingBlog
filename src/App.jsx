@@ -13,7 +13,7 @@ function App() {
   return (
     <StateProvider>
       <QueryClientProvider client={queryClient}>
-        <div className='App'>
+        <div className='App bg bg-secondary' style={{height: "100%"}}>
           <ToolBar />
           <CreatePost />
           <EditPost />

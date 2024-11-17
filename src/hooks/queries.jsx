@@ -16,7 +16,7 @@ export const fetchPost = async (postId) => {
 }
 
 export const fetchPosts = async ({pageParam = 1}) => {
-    const response = await fetch(`https://jsonplaceholder.typicode.com/posts/?_limit=10&_page=${pageParam}`)
+    const response = await fetch(`https://jsonplaceholder.typicode.com/posts/?_limit=50&_page=${pageParam}`)
     if(!response.ok){
         throw new Error('Network response was not ok')
     }
