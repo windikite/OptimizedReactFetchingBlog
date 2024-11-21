@@ -1,26 +1,29 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import PostList from './components/PostList'
-import ToolBar from './components/ToolBar'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { StateProvider } from './StateProvider'
-import CreatePost from './components/CreatePost'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
-import EditPost from './components/EditPost'
+import Dashboard from './components/Dashboard'
+import Login from './components/Login'
+import Logout from './components/Logout'
+import NavigationBar from './components/NavigationBar';
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <StateProvider>
-      <QueryClientProvider client={queryClient}>
-        <div className='App bg bg-secondary' style={{height: "100%"}}>
-          <ToolBar />
-          <CreatePost />
-          <EditPost />
-          <PostList />
-        </div>
-      </QueryClientProvider>
-    </StateProvider>
+        <QueryClientProvider client={queryClient}>
+          <Router>
+            <NavigationBar />
+            <Routes>
+              <Route path='/' element={<Dashboard />}/>
+              <Route path='/login' element={<Login />}/>
+              <Route path='/logout' element={<Logout />}/>
+            </Routes>
+          </Router>
+        </QueryClientProvider>
+      </StateProvider>
   )
 }
 

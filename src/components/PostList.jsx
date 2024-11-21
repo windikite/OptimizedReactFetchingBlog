@@ -8,7 +8,8 @@ import { State } from "../StateProvider"
 import PostContent from './PostContent';
 
 const PostList = () => {
-    const {editingId, setEditingId, selectedUserId, setSelectedUserId} = State();
+    const {editingId, setEditingId, user} = State();
+    const [showFilteredPosts, setShowFilteredPosts] = useState(false)
     const {data, isLoading, isError, isSuccess, isFetching, fetchNextPage, hasNextPage} = useInfiniteQuery({
         queryKey: ['posts'],
         queryFn: fetchPosts,
@@ -20,20 +21,22 @@ const PostList = () => {
 
     // sets pool of posts to display later
     const [allPosts, setAllPosts] = useState([]);
+
     // if data exists, update pool of posts
     useEffect(() => {
         if(data){
             setAllPosts(data.pages)
         }
     }, [data])
+
     // if there is a pool of posts and a selected user id, filter the posts
     const filteredPosts = useMemo(() => {
-        if(selectedUserId){
-            return allPosts.map(page => page.filter(post => post.userId === selectedUserId))
+        if(user.userId){
+            return allPosts.map(page => page.filter(post => post.userId === user.userId))
         }else{
             return allPosts
         }
-    }, [allPosts, selectedUserId])
+    }, [allPosts, user.userId])
 
     const [showDeleteSuccessAlert, setShowDeleteSuccessAlert] = useState(false);
 
@@ -49,11 +52,11 @@ const PostList = () => {
     }
 
     const toggleUserPosts = () => {
-        if(!selectedUserId){
+        if(user.userId && !showFilteredPosts){
             // this just sets the user ID to 2 to simulate filtering
-            setSelectedUserId(2)
-        }else{
-            setSelectedUserId(false)
+            setShowFilteredPosts(true)
+        }else if (user.userId && showFilteredPosts){
+            setShowFilteredPosts(false)
         }
     }
 
@@ -62,10 +65,10 @@ const PostList = () => {
 
     return (
         <div className='bg-secondary'>
-            <Button variant={selectedUserId ? 'success' : 'secondary'} onClick={() => toggleUserPosts()}>Your Posts</Button>
+            <Button variant={showFilteredPosts ? 'success' : 'secondary'} onClick={() => toggleUserPosts()}>Your Posts</Button>
             {showDeleteSuccessAlert && <Alert variant="success">Post deleted!</Alert>}
             <h1 className='text-light'>Dashboard</h1>
-            {isSuccess && !selectedUserId && allPosts.map((page, index) => (
+            {isSuccess && !showFilteredPosts && allPosts.map((page, index) => (
                 <React.Fragment key={index}>
                     {page.map(post => (
                         <PostContent
@@ -76,7 +79,7 @@ const PostList = () => {
                     ))}
                 </React.Fragment>
             ))}
-            {isSuccess && selectedUserId && filteredPosts.map((page, index) => (
+            {isSuccess && showFilteredPosts && filteredPosts.map((page, index) => (
                 <React.Fragment key={index}>
                     {page.map(post => (
                         <PostContent

@@ -7,7 +7,7 @@ export const State = () => useContext(StateContext)
 export const StateProvider = ({children}) => {
     const [showCreatePost, setShowCreatePost] = useState(false)
     const [editingId, setEditingId] = useState(false)
-    const [selectedUserId, setSelectedUserId] = useState(false)
+    const [user, setUser] = useState({name: '', isLoggedIn: false, userId: null})
 
     return (
         <StateContext.Provider value={{
@@ -15,8 +15,8 @@ export const StateProvider = ({children}) => {
             setShowCreatePost,
             editingId,
             setEditingId,
-            selectedUserId,
-            setSelectedUserId
+            user,
+            setUser
             }}>
             {children}
         </StateContext.Provider>
